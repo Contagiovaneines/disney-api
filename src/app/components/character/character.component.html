@@ -1,0 +1,54 @@
+<div *ngIf="erro" class="alert alert-danger text-center mt-3">
+  <strong>Erro:</strong> {{ erro }}
+</div>
+
+<!-- Barra de pesquisa -->
+<div class="search-container mt-4 mb-3">
+  <input [(ngModel)]="pesquisa" (input)="filtrarDados()" type="text" class="form-control custom-search" placeholder="Pesquisar personagens">
+</div>
+
+<!-- Lista de personagens -->
+<div class="container mt-4" *ngIf="dadosFiltrados && dadosFiltrados.length > 0; else noData">
+  <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+    <div *ngFor="let character of getDadosPaginaAtual()" class="col">
+      <div class="card custom-card">
+        <div class="row no-gutters">
+          <!-- Imagem do personagem -->
+          <div class="col-4">
+            <img [src]="character.imageUrl" [alt]="character.name" class="card-img">
+          </div>
+          <!-- Detalhes do personagem -->
+          <div class="col-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ character.name }}</h5>
+              <p><strong>Filmes:</strong> {{ character.films.length > 0 ? character.films.join(', ') : 'N/A' }}</p>
+              <p><strong>Programas de TV:</strong> {{ character.tvShows.length > 0 ? character.tvShows.join(', ') : 'N/A' }}</p>
+              <p><strong>Video Games:</strong> {{ character.videoGames.length > 0 ? character.videoGames.join(', ') : 'N/A' }}</p>
+              <p><strong>Inimigos:</strong> {{ character.enemies.length > 0 ? character.enemies.join(', ') : 'N/A' }}</p>
+              <p><strong>Aliados:</strong> {{ character.allies.length > 0 ? character.allies.join(', ') : 'N/A' }}</p>
+              <a [href]="character.sourceUrl" target="_blank" class="btn btn-sm btn-primary custom-btn">Ver mais detalhes</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noData>
+  <p class="text-center mt-4">Não há dados para exibir no momento.</p>
+</ng-template>
+
+<!-- Navegação de Páginas -->
+<div class="d-flex justify-content-center mt-4">
+  <nav *ngIf="totalPaginas > 1">
+    <ul class="pagination custom-pagination">
+      <li class="page-item" [class.disabled]="paginaAtual === 1">
+        <button class="page-link" (click)="paginaAnterior()">Anterior</button>
+      </li>
+      <li class="page-item" [class.disabled]="paginaAtual === totalPaginas">
+        <button class="page-link" (click)="proximaPagina()">Próxima</button>
+      </li>
+    </ul>
+  </nav>
+</div>
